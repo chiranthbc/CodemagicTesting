@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 120
     environment:
       vars:
-        EXPO_DEV: "true" 
+        EXPO_DEV: "true" # Set to false for production
       node: 18
       groups:
         - expo-secrets
@@ -17,13 +17,15 @@ workflows:
       - name: Install Dependencies
         script: |
           npm install
-          npm install -g expo-cli  
+      - name: Install Expo CLI (New Version)
+        script: |
+          npm install --global eas-cli  # ✅ Use new Expo CLI (eas-cli)
       - name: Login to Expo
         script: |
-          npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD  
+          npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
       - name: Build Expo App
         script: |
-          expo export
+          npx expo export  # ✅ Ensure we use npx
       - name: Upload Artifact
         script: |
           mkdir -p build
@@ -33,4 +35,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - your-email@example.com  
+          - your-email@example.com  # Optional
