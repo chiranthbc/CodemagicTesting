@@ -1,0 +1,36 @@
+workflows:
+  expo-workflow:
+    name: Expo Build
+    instance_type: mac_mini_m1
+    max_build_duration: 120
+    environment:
+      vars:
+        EXPO_DEV: "true" # Set to false for production
+      node: 18
+      groups:
+        - expo-secrets
+    triggering:
+      events:
+        - push
+        - pull_request
+    scripts:
+      - name: Install Dependencies
+        script: |
+          npm install
+      - name: Login to Expo
+        script: |
+          expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+      - name: Build Expo App
+        script: |
+          expo prebuild # Only if using Bare Workflow
+          expo export
+      - name: Upload Artifact
+        script: |
+          mkdir -p build
+          mv dist build/
+    artifacts:
+      - build/**
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
