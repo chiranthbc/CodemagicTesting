@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 120
     environment:
       vars:
-        EXPO_DEV: "true" # Set to false for production
+        EXPO_DEV: "true" 
       node: 18
       groups:
         - expo-secrets
@@ -17,12 +17,12 @@ workflows:
       - name: Install Dependencies
         script: |
           npm install
+          npm install -g expo-cli  
       - name: Login to Expo
         script: |
-          expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD  
       - name: Build Expo App
         script: |
-          expo prebuild # Only if using Bare Workflow
           expo export
       - name: Upload Artifact
         script: |
@@ -33,4 +33,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - your-email@example.com
+          - your-email@example.com  
